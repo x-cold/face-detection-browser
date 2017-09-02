@@ -1,0 +1,86 @@
+<html>
+<heade>
+  <title>Face Detection Test</title>
+  <style>
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
+    #detect {
+      margin: 20px auto;
+      width: 80%;
+    }
+  </style>
+</heade>
+
+<body>
+  <div class="app-container">
+    <div class="image">
+      <img id="image" hidden src="../images/faces.png">
+      <!-- <canvas id="canvas" width="1115px" height="883px"></canvas> -->
+      <canvas id="canvas" width="493px" height="329px"></canvas>
+    </div>
+    <button id="detect" onclick="detect()"  class="btn btn-lg btn-primary">检测</button>
+  </div>
+  <footer></footer>
+  <script>
+    var image = document.getElementById('image');
+    var canvas = document.getElementById('canvas');
+
+    var ctx = canvas.getContext("2d");
+    var scale = 1;
+
+    image.onload = function () {
+      ctx.drawImage(image,
+        0, 0, image.width, image.height,
+        0, 0, canvas.width, canvas.height);
+
+      scale = canvas.width / image.width;
+    };
+
+
+    function detect() {
+      if (window.FaceDetector == undefined) {
+        console.error('Face Detection not supported');
+        return;
+      }
+
+      var faceDetector = new FaceDetector();
+      console.time('detect');
+      return faceDetector.detect(image)
+        .then(faces => {
+          console.log(faces)
+          // Draw the faces on the <canvas>.
+          var ctx = canvas.getContext("2d");
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = "red";
+          for (var i = 0; i < faces.length; i++) {
+            var item = faces[i].boundingBox;
+            ctx.rect(Math.floor(item.x * scale),
+              Math.floor(item.y * scale),
+              Math.floor(item.width * scale),
+              Math.floor(item.height * scale));
+            ctx.stroke();
+          }
+
+          // Add the faces as strings to the <footer>
+          // var footer = document.getElementsByTagName('footer')[0];
+          // footer.innerHTML =
+          //   '<p>Detected ' + faces.length + ' faces</p><ul>';
+          // for (var i = 0; i < faces.length; i++) {
+          //   footer.innerHTML +=
+          //     '<li>@ (' + faces[i].boundingBox.x + ',' + faces[i].boundingBox.y + '), size ' +
+          //     faces[i].boundingBox.width + 'x' + faces[i].boundingBox.height + '</li>';
+          // }
+          // footer.innerHTML += '</ul>';
+          console.timeEnd('detect')
+        })
+        .catch((e) => {
+          console.error("Boo, Face Detection failed: " + e);
+        });
+    }
+  </script>
+</body>
+
+</html>
