@@ -1,7 +1,5 @@
 # face-detection-browser
 
-## Start
-
 1. start a http server.
 
 ```sh
