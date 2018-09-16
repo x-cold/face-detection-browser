@@ -1,5 +1,6 @@
 <html>
-<heade>
+
+<head>
   <title>Face Detection Test</title>
   <style>
     .app-container {
@@ -12,16 +13,15 @@
       width: 80%;
     }
   </style>
-</heade>
+</head>
 
 <body>
   <div class="app-container">
     <div class="image">
-      <img id="image" hidden src="../images/faces.png">
-      <!-- <canvas id="canvas" width="1115px" height="883px"></canvas> -->
+      <img id="image" hidden src="./faces.png">
       <canvas id="canvas" width="493px" height="329px"></canvas>
     </div>
-    <button id="detect" onclick="detect()"  class="btn btn-lg btn-primary">检测</button>
+    <button id="detect" onclick="detect()" class="btn btn-lg btn-primary">检测</button>
   </div>
   <footer></footer>
   <script>
@@ -39,7 +39,6 @@
       scale = canvas.width / image.width;
     };
 
-
     function detect() {
       if (window.FaceDetector == undefined) {
         console.error('Face Detection not supported');
@@ -50,7 +49,7 @@
       console.time('detect');
       return faceDetector.detect(image)
         .then(faces => {
-          console.log(faces)
+          console.log(faces);
           // Draw the faces on the <canvas>.
           var ctx = canvas.getContext("2d");
           ctx.lineWidth = 2;
@@ -74,7 +73,7 @@
           //     faces[i].boundingBox.width + 'x' + faces[i].boundingBox.height + '</li>';
           // }
           // footer.innerHTML += '</ul>';
-          console.timeEnd('detect')
+          console.timeEnd('detect');
         })
         .catch((e) => {
           console.error("Boo, Face Detection failed: " + e);
